@@ -31,20 +31,7 @@ Before running this application, make sure you have:
 
 ## Environment Variables
 
-Create a `.env.local` file in the root directory with the following variables:
 
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# MongoDB Configuration
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/blog_summarizer?retryWrites=true&w=majority
-
-# Next.js Configuration (for production)
-NEXTAUTH_SECRET=your_secret_key_here
-NEXTAUTH_URL=https://your-deployed-url.vercel.app
-```
 
 ## Database Setup
 
@@ -53,41 +40,6 @@ NEXTAUTH_URL=https://your-deployed-url.vercel.app
 1. Create a new project on [Supabase](https://supabase.com)
 2. Go to the SQL Editor and run the following schema:
 
-```sql
--- Create blog_summaries table
-CREATE TABLE IF NOT EXISTS blog_summaries (
-  id BIGSERIAL PRIMARY KEY,
-  blog_url TEXT NOT NULL,
-  title TEXT NOT NULL,
-  summary_english TEXT NOT NULL,
-  summary_urdu TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_blog_summaries_url ON blog_summaries(blog_url);
-CREATE INDEX IF NOT EXISTS idx_blog_summaries_created_at ON blog_summaries(created_at);
-
--- Enable Row Level Security (optional)
-ALTER TABLE blog_summaries ENABLE ROW LEVEL SECURITY;
-
--- Create policy for anonymous access (adjust as needed)
-CREATE POLICY "Allow anonymous read access" ON blog_summaries
-FOR SELECT USING (true);
-
-CREATE POLICY "Allow anonymous insert access" ON blog_summaries
-FOR INSERT WITH CHECK (true);
-```
-
-3. Copy your project URL and anon key from Settings > API
-
-### MongoDB Setup
-
-1. Create a cluster on [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create a database named `blog_summarizer`
-3. The application will automatically create the `blog_contents` collection
-4. Copy your connection string and add it to your environment variables
 
 ## Installation
 
@@ -95,7 +47,6 @@ FOR INSERT WITH CHECK (true);
 
 ```bash
 git clone <repository-url>
-cd assignment-2
 ```
 
 2. **Install dependencies**
@@ -108,7 +59,7 @@ yarn install
 
 3. **Set up environment variables**
 
-Copy `.env.example` to `.env.local` and fill in your database credentials.
+ `.env.local` and fill in your database credentials.
 
 4. **Run the development server**
 
@@ -132,32 +83,6 @@ Navigate to [http://localhost:3000](http://localhost:3000)
    - Saving to databases
 3. **View Results**: See the original content info, English summary, Urdu translation, and database storage confirmation
 
-## API Endpoints
-
-### POST /api/summarize
-
-Processes a blog URL and returns summary data.
-
-**Request Body:**
-```json
-{
-  "url": "https://example.com/blog-post"
-}
-```
-
-**Response:**
-```json
-{
-  "id": 1,
-  "blog_url": "https://example.com/blog-post",
-  "title": "Blog Post Title",
-  "summary_english": "Generated summary...",
-  "summary_urdu": "اردو ترجمہ...",
-  "created_at": "2024-01-01T00:00:00.000Z",
-  "word_count": 1500,
-  "author": "Author Name"
-}
-```
 
 ### GET /api/summarize
 
@@ -187,15 +112,6 @@ vercel --prod
 
    Go to your project settings in Vercel and add all the environment variables from your `.env.local` file.
 
-## Environment Variables for Vercel
-
-Make sure to add these in your Vercel project settings:
-
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `MONGODB_URI`
-- `NEXTAUTH_SECRET`
-- `NEXTAUTH_URL`
 
 ## Features Deep Dive
 
@@ -222,32 +138,6 @@ Make sure to add these in your Vercel project settings:
 - **MongoDB**: Archives full content for backup and analysis
 - Cross-referencing between databases for data integrity
 - Optimized for both read and write operations
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Scraping Fails**
-   - Check if the URL is accessible
-   - Some sites block automated requests
-   - Try different blog URLs
-
-2. **Database Connection Issues**
-   - Verify environment variables
-   - Check database credentials
-   - Ensure IP whitelist includes your deployment
-
-3. **Translation Not Working**
-   - Check if content contains supported words
-   - Review translation dictionary coverage
-   - Some technical terms may not be translated
-
-### Performance Optimization
-
-- Enable database connection pooling
-- Implement caching for frequently scraped URLs
-- Use CDN for static assets
-- Monitor API response times
 
 ## Contributing
 
