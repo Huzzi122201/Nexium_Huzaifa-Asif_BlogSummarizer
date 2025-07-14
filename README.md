@@ -29,6 +29,9 @@ Before running this application, make sure you have:
 3. **Supabase account** and project
 4. **MongoDB Atlas account** (or local MongoDB instance)
 
+## Tech Stack
+-Demo:[https://nexium-huzaifa-asif-blog-summarizer-16vbrvh1i.vercel.app/](https://nexium-huzaifa-asif-blog-summarizer-16vbrvh1i.vercel.app/)
+
 ## Environment Variables
 
 
